@@ -4,7 +4,8 @@ import EventListAttendee from './EventListAttendee';
 
 export default function EventListItem(props) {
 
-    const { e } = props;
+    const { e, selectEvent, delEvent } = props;
+    console.log("piss", selectEvent);
 
     return (
         <Segment.Group>
@@ -36,7 +37,8 @@ export default function EventListItem(props) {
             </Segment>
             <Segment clearing>
                 <div>{e.description}</div>
-                <Button color='teal' floated='right' content='view' />
+                <Button onClick={() => delEvent(e.id)} color='teal' floated='right' content='delete' />
+                <Button onClick={() => selectEvent(e)} color='teal' floated='right' content='view' />
             </Segment>
         </Segment.Group>
     )
