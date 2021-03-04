@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
 import cuid from 'cuid';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { createEvent, updateEvent } from '../eventActions';
 
 export default function EventForm(props) {
+    const { match, history } = props;
+    const dispatch = useDispatch();
 
-    const { setFormOpen, createEventP, selectedEvent, updateEvent } = props;
+    const selectedEvent = useSelector(state => state.event.events.find(e => e.id === match.params.id));
 
     const initVals = selectedEvent ?? {  //null conditional operator
         title: '',
@@ -20,15 +24,15 @@ export default function EventForm(props) {
     const [values, setVals] = useState(initVals);
 
     function handleFormSubmit() {
-        selectedEvent ? updateEvent({ ...selectedEvent, ...values }) : //using handleupdateEvent in dashboard
-            createEventP({
+        selectedEvent ? dispatch(updateEvent({ ...selectedEvent, ...values })) :
+            dispatch(createEvent({
                 ...values,
                 id: cuid(),
                 hostedBy: 'Roberta',
                 attendees: [],
                 hostPhotoURL: '/assets/user.png'
-            });
-        setFormOpen(false);
+            }));
+        history.push('/events');
     }
 
     function handleInputChange(e) {

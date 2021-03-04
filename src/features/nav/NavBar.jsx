@@ -6,7 +6,7 @@ import SignedInMenu from './SignedInMenu';
 
 export default function NavBar(props) {
     const history = useHistory();
-    const { setFormOpen } = props;
+    //const { setFormOpen } = props;
     const [auth, setAuth] = useState(false);
 
     function handleSignOut() {
@@ -22,9 +22,10 @@ export default function NavBar(props) {
                     Re-Vents
                 </Menu.Item>
                 <Menu.Item as={NavLink} to='/events' name='Eventsp' />
+                <Menu.Item as={NavLink} to='/sandbox' name='SandBox' />
                 {auth &&
                     <Menu.Item as={NavLink} to='/createEvent'>
-                        <Button onClick={() => setFormOpen(true)} positive inverted content='Create Event' />
+                        <Button positive inverted content='Create Event' />
                     </Menu.Item>}
                 {auth ? <SignedInMenu signOut={handleSignOut} /> : <SignedOutMenu setAuth={setAuth} />}
 
