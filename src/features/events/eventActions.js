@@ -1,4 +1,5 @@
 import { CREATE_EVENT, UPDATE_EVENT, DELETE_EVENT } from "./eventConstants";
+// return object to reducer that updates state within store
 
 export function createEvent(evt) {
     return {
