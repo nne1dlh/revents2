@@ -1,3 +1,4 @@
+/* global google */
 import React from 'react';
 import { Button, Header, Segment } from 'semantic-ui-react';
 import cuid from 'cuid';
@@ -11,6 +12,7 @@ import MyTextArea from '../../../app/common/form/MyTextArea';
 import MySelectInput from '../../../app/common/form/MyDropDown';
 import { categoryData } from '../../../app/api/categoryOptions';
 import MyDateInput from '../../../app/common/form/MyDateInput';
+import MyPlaceInput from '../../../app/common/form/MyPlaceInput';
 
 export default function EventForm(props) {
     const { match, history } = props;
@@ -22,8 +24,14 @@ export default function EventForm(props) {
         title: '',
         category: '',
         description: '',
-        city: '',
-        venue: '',
+        city: {
+            address: '',
+            latLng: null
+        },
+        venue: {
+            address: '',
+            latLng: null
+        },
         date: '',
     };
 
@@ -31,12 +39,14 @@ export default function EventForm(props) {
         title: Yup.string().required('You must provide title'),
         category: Yup.string().required('You must provide category'),
         description: Yup.string().required(),
-        city: Yup.string().required(),
-        venue: Yup.string().required(),
+        city: Yup.object().shape({
+            address: Yup.string().required('City is freaking reqired')
+        }),
+        venue: Yup.object().shape({
+            address: Yup.string().required('Venue is fring reqired')
+        }),
         date: Yup.string().required()
     })
-
-
 
     return (
         <Segment clearing>
@@ -56,7 +66,7 @@ export default function EventForm(props) {
                     history.push('/events');
                 }}
             >
-                {({ isSubmitting, dirty, isValid }) => (
+                {({ isSubmitting, dirty, isValid, values }) => (
                     <Form className='ui form' >
                         <Header sub color='teal' content='Event Detail' />
                         <MyTextInput name='title' placeholder='Event title' />
@@ -68,8 +78,16 @@ export default function EventForm(props) {
                         <MySelectInput name='category' placeholder='Event category' options={categoryData} />
                         <MyTextArea name='description' placeholder='Description' rows={3} />
                         <Header sub color='teal' content='Event Location Deats' />
-                        <MyTextInput name='city' placeholder='City' />
-                        <MyTextInput name='venue' placeholder='Venue' />
+                        <MyPlaceInput name='city' placeholder='City' />
+                        <MyPlaceInput
+                            name='venue'
+                            disabled={!values.city.latLng}
+                            placeholder='Venue'
+                            options={{
+                                location: new google.maps.LatLng(values.city.latLng),
+                                radius: 1000,
+                                types: ['establishment']
+                            }} />
                         <MyDateInput
                             name='date'
                             placeholderText='Event Date'

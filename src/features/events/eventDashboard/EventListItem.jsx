@@ -30,7 +30,7 @@ export default function EventListItem(props) {
             <Segment>
                 <span>
                     <Icon name='clock' /> {format(e.date, 'MMM d, yyyy h:mm a')}
-                    <Icon name='marker' />{e.venue}
+                    <Icon name='marker' />{e.venue.address}
                 </span>
             </Segment>
             <Segment secondary>
